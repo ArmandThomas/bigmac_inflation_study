@@ -1,0 +1,1 @@
+export const URL = process.env.IS_DOCKER ? "http://evennode:8000" : "http://localhost:8000";
