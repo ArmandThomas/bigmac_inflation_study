@@ -29,19 +29,29 @@ const ChartCountries = ({country}) => {
     getData();
   }, [country])
 
-
   const series = [
     {
-      name: "BigMac Price",
+      name: "BigMac Price ($)",
       type: "line",
       data: data.map(d => d['dollar_price_avg'])
     },
     {
-      name: "Inflation",
+      name: "Global Inflation (%)",
       type: "line",
-      data: data.length > 0 ? data.map(d => d['inflation_value'].toFixed(1)) : []
+      data: data.length > 0 ? data.map(d => d['global_inflation_avg'].toFixed(1)) : []
+    },
+    {
+      name: "Energy Inflation (%)",
+      type: "line",
+      data: data.length > 0 ? data.filter(d => d['energy_inflation_avg'] !== null).map(d => d['energy_inflation_avg'].toFixed(1)) : []
+    },
+    {
+      name: "Food Inflation (%)",
+      type: "line",
+      data: data.length > 0 ? data.filter(d => d['food_inflation_avg'] !== null).map(d => d['food_inflation_avg'].toFixed(1)) : []
     }
   ];
+
 
 
   const options = {
@@ -62,65 +72,10 @@ const ChartCountries = ({country}) => {
     xaxis: {
       categories: data.map(d => d['Year']),
     },
-    yaxis: [
-      {
-        seriesName: 'BigMac Price',
-        axisTicks: {
-          show: true,
-        },
-        axisBorder: {
-          show: true,
-        },
-        labels: {
-          style: {
-            colors: '#008FFB',
-            fontSize: '16px'
-          },
-          formatter: function (val) {
-            if (val) {
-              return val?.toFixed(2) + " $";
-            }
-          }
-        },
-        title: {
-          text: "BigMac Price",
-          style: {
-            color: '#008FFB',
-          }
-        },
-      },
-      {
-        seriesName: 'Inflation',
-        opposite: false,
-        axisTicks: {
-          show: true,
-        },
-        axisBorder: {
-          show: true,
-        },
-        labels: {
-          style: {
-            colors: '#00E396',
-            fontSize: '16px'
-          },
-          formatter: function (val) {
-            if (val) {
-              return val?.toFixed(1) + " %";
-            }
-          }
-        },
-        title: {
-          text: "Inflation",
-          style: {
-            color: '#00E396',
-          }
-        }
-      }
-    ]
   }
 
   return (
-      <div>
+      <ContainerChart>
         {
           data.length > 0 &&
           <Chart
@@ -131,10 +86,16 @@ const ChartCountries = ({country}) => {
               width={1300}
           />
         }
-      </div>
+      </ContainerChart>
   )
 
 }
 
+const ContainerChart = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  margin: 20px;
+`;
 
 export default ChartCountries;

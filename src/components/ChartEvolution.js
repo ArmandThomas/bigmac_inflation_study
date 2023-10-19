@@ -44,7 +44,7 @@ const ChartEvolution = () => {
     {
       name: "Inflation",
       type: "line",
-      data: data.map(d => d['inflation_value_sum'].toFixed(1))
+      data: data.map(d => d['global_inflation_avg'].toFixed(1))
     },
     {
       name: "McDonalds Revenue",
