@@ -12,6 +12,7 @@ const year = "2022";
 const Map = () => {
   const [data, setData] = useState([]);
   const [country, setCountry] = useState("");
+  const [mode, setMode] = useState("bigmac");
 
   const [zoom, setZoom] = useState(160);
 
@@ -29,7 +30,8 @@ const Map = () => {
     const [filteredData] = data.filter(d => d['Country'] === geoInfo.properties.name);
     if (!filteredData) {
       return "lightgray"
-    } else {
+    }
+    if (mode === "bigmac") {
       if (filteredData["dollar_price_avg"] < 1) {
         return "#FDE992";
       } else if (filteredData["dollar_price_avg"] < 2.5) {
@@ -37,6 +39,16 @@ const Map = () => {
       } else if (filteredData["dollar_price_avg"] < 5) {
         return "#FB9337";
       } else if (filteredData["dollar_price_avg"] < 10) {
+        return "#F54728";
+      }
+    } else {
+      if (filteredData["correlation"] < -0.5) {
+        return "#FDE992";
+      } else if (filteredData["correlation"] < 0) {
+        return "#FCD34D";
+      } else if (filteredData["correlation"] < 0.5) {
+        return "#FB9337";
+      } else if (filteredData["correlation"] < 1) {
         return "#F54728";
       }
     }
@@ -66,23 +78,35 @@ const Map = () => {
             <Legend>
               <div>
                 <div style={{backgroundColor: "#FDE992"}}/>
-                <p>Less than 1$</p>
+                {
+                  mode === "bigmac" ? <p>Less than 1$</p> : <p>Less than -0.5</p>
+                }
               </div>
               <div>
                 <div style={{backgroundColor: "#FCD34D"}}/>
-                <p>Between 1$ and 2.5$</p>
+                {
+                  mode === "bigmac" ? <p>Between 1$ and 2.5$</p> : <p>Between -0.5 and 0</p>
+                }
               </div>
               <div>
                 <div style={{backgroundColor: "#FB9337"}}/>
-                <p>Between 2.5$ and 5$</p>
+                {
+                  mode === "bigmac" ? <p>Between 2.5$ and 5$</p> : <p>Between 0 and 0.5</p>
+                }
               </div>
               <div>
                 <div style={{backgroundColor: "#F54728"}}/>
-                <p>Between 5$ and 10$</p>
+                {
+                  mode === "bigmac" ? <p>Between 5$ and 10$</p> : <p>Between 0.5 and 1</p>
+                }
               </div>
             </Legend>
           </Bottom>
           <ContainerComposableMap>
+            <select value={mode} onChange={(e) => setMode(e.target.value)}>
+              <option value="bigmac">Bigmac price</option>
+              <option value="corr">Correlation</option>
+            </select>
             <Modal
                 isOpen={country !== ""}
                 onRequestClose={() => setCountry("")}

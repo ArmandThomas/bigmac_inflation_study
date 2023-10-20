@@ -5,7 +5,6 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
-    background-image: url(${Background});
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
