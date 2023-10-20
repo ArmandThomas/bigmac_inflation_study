@@ -56,71 +56,70 @@ const Map = () => {
 
 
   return (
-      <Container>
-        <Bottom>
-          <ZoomContainer>
-            <button onClick={() => setZoom(zoom + 10)}>+</button>
-            <button onClick={() => setZoom(zoom - 10)}>-</button>
-          </ZoomContainer>
-          <Legend>
-            <div>
-              <div style={{backgroundColor: "#FDE992"}}/>
-              <p>Less than 1$</p>
-            </div>
-            <div>
-              <div style={{backgroundColor: "#FCD34D"}}/>
-              <p>Between 1$ and 2.5$</p>
-            </div>
-            <div>
-              <div style={{backgroundColor: "#FB9337"}}/>
-              <p>Between 2.5$ and 5$</p>
-            </div>
-            <div>
-              <div style={{backgroundColor: "#F54728"}}/>
-              <p>Between 5$ and 10$</p>
-            </div>
-          </Legend>
-        </Bottom>
+      <div>
+        <Container>
+          <Bottom>
+            <ZoomContainer>
+              <button onClick={() => setZoom(zoom + 10)}>+</button>
+              <button onClick={() => setZoom(zoom - 10)}>-</button>
+            </ZoomContainer>
+            <Legend>
+              <div>
+                <div style={{backgroundColor: "#FDE992"}}/>
+                <p>Less than 1$</p>
+              </div>
+              <div>
+                <div style={{backgroundColor: "#FCD34D"}}/>
+                <p>Between 1$ and 2.5$</p>
+              </div>
+              <div>
+                <div style={{backgroundColor: "#FB9337"}}/>
+                <p>Between 2.5$ and 5$</p>
+              </div>
+              <div>
+                <div style={{backgroundColor: "#F54728"}}/>
+                <p>Between 5$ and 10$</p>
+              </div>
+            </Legend>
+          </Bottom>
+          <ContainerComposableMap>
+            <Modal
+                isOpen={country !== ""}
+                onRequestClose={() => setCountry("")}
+                style={customStyles}
+            >
+              <ChartCountries country={country} year={year}/>
+            </Modal>
+            {
+              data.length === 0 ? <h1>Loading...</h1>
+                  : <ComposableMap
+                      projection="geoEqualEarth"
+                      projectionConfig={{
+                        scale: zoom,
+                        rotation: [-11, 0, 0],
+                      }}
+                      width={800}
+                      height={400}
+                  >
+                    <Geographies geography="/d3.json">
+                      {({ geographies }) =>
+                          geographies.map((geo) => (
+                              <Geography
+                                  key={geo.rsmKey}
+                                  geography={geo}
+                                  fill={returnStyleForCountryCode(geo)}
+                                  stroke="#FFF"
+                                  onClick={() => setCountry(geo.properties.name)}
 
-        <ContainerComposableMap>
-          <Modal
-              isOpen={country !== ""}
-              onRequestClose={() => setCountry("")}
-              style={customStyles}
-          >
-            <ChartCountries country={country} year={year}/>
-          </Modal>
-          {
-            data.length === 0 ? <h1>Loading...</h1>
-                : <ComposableMap
-                    projection="geoEqualEarth"
-                    projectionConfig={{
-                      scale: zoom,
-                      rotation: [-11, 0, 0],
-                    }}
-                    width={800}
-                    height={400}
-                >
-                  <Geographies geography="/d3.json">
-                    {({ geographies }) =>
-                        geographies.map((geo) => (
-                            <Geography
-                                key={geo.rsmKey}
-                                geography={geo}
-                                fill={returnStyleForCountryCode(geo)}
-                                stroke="#FFF"
-                                onClick={() => setCountry(geo.properties.name)}
-
-                            />
-                        ))
-                    }
-                  </Geographies>
-                </ComposableMap>
-          }
-        </ContainerComposableMap>
-      </Container>
-
-
+                              />
+                          ))
+                      }
+                    </Geographies>
+                  </ComposableMap>
+            }
+          </ContainerComposableMap>
+        </Container>
+      </div>
   )
 }
 

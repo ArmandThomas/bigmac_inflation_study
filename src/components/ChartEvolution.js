@@ -35,6 +35,8 @@ const ChartEvolution = () => {
     getData();
   }, []);
 
+  console.log(data);
+
   const series = [
     {
       name: "BigMac Price",
@@ -51,6 +53,11 @@ const ChartEvolution = () => {
       type: "column",
       data: data.map(d => d['McDonalds_Revenue'])
     },
+    {
+      name : "surcôte de l'inflation (%)",
+      type : "area",
+      data : data.map(d => d['diff'])
+    }
 
   ];
 
@@ -60,7 +67,8 @@ const ChartEvolution = () => {
       stacked: false,
     },
     stroke: {
-      width: [4, 4, 4]
+      width: [4, 4, 4, 4],
+      curve: 'smooth'
     },
     title: {
       text: 'BigMac Price & Inflation Evolution & McDonalds Revenue',
@@ -139,6 +147,25 @@ const ChartEvolution = () => {
           },
           formatter: function (value) {
             return (value / 1000000000).toFixed(2) + "B$";
+          }
+        }
+      },
+      {
+        seriesName: 'côte (%)',
+        opposite: true,
+        axisTicks: {
+          show: true,
+        },
+        axisBorder: {
+          show: true,
+        },
+        labels: {
+          style: {
+            colors: '#FF4560',
+            fontSize: '16px'
+          },
+          formatter: function (value) {
+            return value.toFixed(1) + "%";
           }
         }
       }

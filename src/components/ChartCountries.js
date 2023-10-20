@@ -28,7 +28,6 @@ const ChartCountries = ({country}) => {
   useEffect(() => {
     getData();
   }, [country])
-
   const series = [
     {
       name: "BigMac Price ($)",
@@ -49,6 +48,11 @@ const ChartCountries = ({country}) => {
       name: "Food Inflation (%)",
       type: "line",
       data: data.length > 0 ? data.filter(d => d['food_inflation_avg'] !== null).map(d => d['food_inflation_avg'].toFixed(1)) : []
+    },
+    {
+      name : "surcôte de l'inflation (%)",
+      type : "area",
+      data : data.length > 0 ? data.map(d => d['diff']) : []
     }
   ];
 
